@@ -1,3 +1,4 @@
+//t_state class definition 
 #ifndef STATE
 #define STATE
 
