@@ -14,10 +14,10 @@ class open_list(){
 		~open_list{}
 
 		//Adding a new state
-		void push(t_state state);
+		void push(astar_node state);
 
 		//Extracting next state
-		t_state pop();
+		astar_node pop();
 
 	private:
 
@@ -25,7 +25,7 @@ class open_list(){
 		int minimum;
 
 		//Container (Data structure) itself
-		std::array<std::vector<t_state>> container;
+		std::array<std::vector<astar_node>> container;
 
 		//Returns the new minimum index after pushing
 		int new_min();

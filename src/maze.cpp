@@ -1,5 +1,6 @@
 #include "maze.hpp"
 #include "t_state.hpp"
+#include "closed_list.hpp"
 //Exception for constructor
 class constExc: public std::runtime_error
 {

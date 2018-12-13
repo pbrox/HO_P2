@@ -9,6 +9,10 @@
 //Compile with --std=c++17 or higher
 #include <algorithm>
 
+//For actual use in A*, pair state, parent
+///DUDAAAAS
+using astar_node = std::pair<t_state,std::set::iterator>;
+
 
 enum moves{up, down, left, right};
 enum heuristic_funcs{h_default};
@@ -47,6 +51,12 @@ class t_state{
 		//printing the state, for debug purposes
 		void print();
 
+		//Getting F
+		int get_f(){return g + heuristic_v;}
+
+		//Getting G
+		int get_g(){return g;}
+
 
 	private:
 		std::set<std::pair<int,int>> keys; //Set containing all the remaining keys
@@ -67,3 +77,5 @@ class t_state{
 
 };
 #endif
+
+//OPERADOR MENORRRRR
