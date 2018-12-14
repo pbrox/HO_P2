@@ -12,15 +12,7 @@
 /*
 
 	TODO:
-		* Astar nodes, mira lo del void *
-			es el using de abajo
-
-		* Implementar menor
 */
-
-//For actual use in A*, pair state, parent
-//using astar_node = std::pair<t_state,void*>;
-
 
 enum moves{up, down, left, right};
 enum heuristic_funcs{h_default};
@@ -54,16 +46,19 @@ class t_state{
 		bool is_final(const Maze & map); // returns true if the state is final
 
 		//overloading of comparison between states
-		bool operator== (const t_state &rhs);
+		bool operator== (const t_state &rhs) const;
+
+		//overloading < operator
+		bool operator< (const t_state &rhs) const;
 
 		//printing the state, for debug purposes
 		void print();
 
 		//Getting F
-		int get_f(){return g + heuristic_v;}
+		int get_f() const {return g + heuristic_v;} 
 
 		//Getting G
-		int get_g(){return g;}
+		int get_g() const {return g;}
 
 
 	private:
@@ -84,4 +79,8 @@ class t_state{
 
 
 };
+
+//For actual use in A*, pair state, path list 
+using astar_node = std::pair<t_state,std::vector<std::pair<int,int>>>;
+
 #endif

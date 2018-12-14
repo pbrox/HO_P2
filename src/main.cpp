@@ -2,6 +2,7 @@
 #include <string>
 #include "maze.hpp"
 #include "t_state.hpp"
+#include "closed_list.hpp"
 
 int main(int argc, char ** argv){
 	
@@ -39,10 +40,11 @@ int main(int argc, char ** argv){
 /*
 	To do:
 	 * Finish middle todos
-	 * include opoen and closed
-
+	 * include opoen
+	 
 	 * CREATE AGENT
 	 * Create astar inside
 	 * Main
+	 * HELP
 
 */

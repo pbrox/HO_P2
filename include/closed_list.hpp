@@ -24,10 +24,10 @@ class closed_list{
 		~closed_list(){}
 
 		//inseting an element
-		bool push(astar_node to_insert){return (list.insert(to_insert)).second;}
+		bool push(const astar_node  & to_insert){return (list.insert(to_insert)).second;}
 
-		//Checking if an element belongs
-		bool belongs(const astar_node & to_check){return list.find(to_check) != list.end();}
+		//Checking if an element belongs (0 cast to false, 1 to true, no more possible vaues of count for a set)
+		bool belongs(const astar_node & to_check) const {return list.count(to_check);}
 
 	private:
 
@@ -36,12 +36,3 @@ class closed_list{
 
 };
 #endif 
-
-/*
-	TO DO:
-		* Fix finding problem
-		* End astar_node implementation (and fix)
-		* Stablish < in states
-		* can push receive const &?
-*/
-

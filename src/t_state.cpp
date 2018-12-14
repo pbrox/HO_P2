@@ -51,9 +51,7 @@ bool t_state::can_move(moves move, const Maze &map){
 		*	The procedure is to go first to the right and then to the left on the row, until:
 		*		-> A wall, a stone or limit reached -> position allowed
 				-> A snake is found -> position illegal
-	*/
 
-	/*
 		This loop checking is only executed if the special case of move to the right && stone at right (or the same with left),
 		this is because as we are not changing the stones (just cckecking), new position will have a stone, and that stone is 
 		moved to the right (or left), so this part is still protected, visually,
@@ -181,20 +179,17 @@ std::pair<int,int> t_state::next_pos(moves move, std::optional<std::pair<int,int
 
 //Default heuristic function (to fill)
 int t_state::default_h(){
-	return 1;
+	return 0;
 }
 
 //Equal operator
-bool t_state::operator== (const t_state &rhs){
+bool t_state::operator== (const t_state &rhs) const{
 
 	//Check each value but cost, heuristic and heuristic function
 	if(rhs.AL_position != this->AL_position) return false;
 	if(rhs.keys != this->keys) return false; //This works because set is an ordered structure and if they contain same elements they will be equal
 
 	//Now in stones (as we do not care about order here)
-	//first sizes
-	if(rhs.stones.size() != this->stones.size()) return false;
-
 	//Now check that every element of one is in the other
 	for(auto i : rhs.stones){
 		if(std::find(this->stones.begin(), this->stones.end(),i) == this->stones.end()) return false;
@@ -203,6 +198,29 @@ bool t_state::operator== (const t_state &rhs){
 	//If all conditions for equal
 	return true;
 
+}
+
+//overloading < operator for states, Lexicographical
+bool t_state::operator< (const t_state &rhs) const{
+
+	//First comparate the AL_position, if they are not equal
+	if(AL_position != rhs.AL_position) return AL_position < rhs.AL_position;
+
+	//If positions are the same, let's check vectors
+	//sort them because are equal if they have same elements  regardess the positions
+	auto v1 = this->stones, v2 = rhs.stones;
+	std::sort(v1.begin(), v1.end());
+	std::sort(v2.begin(), v2.end());
+
+	//Comparing lexicogafical (bare in mind they have aways same length) eemet by element
+	for( size_t  i= 0; i < v1.size(); ++i) if(v1[i] != v2[i]) return v1[1] < v2[i];
+
+	//Finaly, we go with the keys
+	if(keys != rhs.keys) return keys < rhs.keys;
+	
+	//If this check is finished, then states are equa
+	return false;
+	
 }
 
 //printing the state, for debug purposes
