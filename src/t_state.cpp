@@ -24,7 +24,7 @@ void t_state::get_position(int &x, int &y){
 
 */
 
-bool t_state::can_move(moves move, Maze map){
+bool t_state::can_move(moves move, const Maze &map){
 
 	bool is_stone = false; //used below
 
@@ -147,7 +147,7 @@ int t_state::heuristic(heuristic_funcs choosen){
 }
 
 //This method returns true if the state is final in the given map
-bool t_state::is_final(Maze map){
+bool t_state::is_final(const Maze &map){
 
 	//Returning true if the keys set is empty and the AL_position is the map goal
 	return (keys.size() == 0 && map.isGoal(AL_position.first,AL_position.second));

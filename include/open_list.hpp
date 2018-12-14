@@ -6,6 +6,14 @@
 #include <vector>
 #include <array>
 
+/*
+	TO OD:
+	* Fix type (Astar node)
+	* Insert sorted!
+	* Implementation!
+
+*/
+
 class open_list(){
 
 	public:

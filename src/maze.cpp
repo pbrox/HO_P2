@@ -1,6 +1,6 @@
 #include "maze.hpp"
 #include "t_state.hpp"
-#include "closed_list.hpp"
+
 //Exception for constructor
 class constExc: public std::runtime_error
 {
@@ -9,6 +9,12 @@ class constExc: public std::runtime_error
             std::runtime_error(err_str)
         {}
 };
+
+/*
+	TO DO:
+
+	
+*/
 
 
 //Maze class implementation
@@ -115,12 +121,12 @@ Maze::Maze(std::string path){
 }
 
 //returns true when the given pstd::coutition is goal
-bool Maze::isGoal(int row, int col) {
+bool Maze::isGoal(int row, int col) const{
 	return (col == goal[0] && row == goal[1]); //col -> x row -> y
 }
 
 //overloading () operator to obtain the current cell
-cell_type& Maze::operator()(int row, int col){
+cell_type Maze::operator()(int row, int col) const{
 
 	//std::cout << row << " " << col << '\n';
 	 
@@ -134,7 +140,7 @@ cell_type& Maze::operator()(int row, int col){
 
 
 //Printing the map for debugging 
-void Maze::print(){
+void Maze::print() const{
 
 	//checking map
 	for(int i = 0; i < ydim; ++i){ //For each row

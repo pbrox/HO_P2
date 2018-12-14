@@ -9,9 +9,17 @@
 //Compile with --std=c++17 or higher
 #include <algorithm>
 
+/*
+
+	TODO:
+		* Astar nodes, mira lo del void *
+			es el using de abajo
+
+		* Implementar menor
+*/
+
 //For actual use in A*, pair state, parent
-///DUDAAAAS
-using astar_node = std::pair<t_state,std::set::iterator>;
+//using astar_node = std::pair<t_state,void*>;
 
 
 enum moves{up, down, left, right};
@@ -31,7 +39,7 @@ class t_state{
 		~t_state();
 
 		void get_position(int &x, int &y); //returns the AL position
-		bool can_move(moves move, Maze map); //returns true if for the given state and the maze the movement move is executable
+		bool can_move(moves move, const Maze & map); //returns true if for the given state and the maze the movement move is executable
 
 				/*			 WARNING! 
 					This move method assume
@@ -43,7 +51,7 @@ class t_state{
 
 		t_state move(moves move); //returns the state generated executing operation move
 		
-		bool is_final(Maze map); // returns true if the state is final
+		bool is_final(const Maze & map); // returns true if the state is final
 
 		//overloading of comparison between states
 		bool operator== (const t_state &rhs);
@@ -77,5 +85,3 @@ class t_state{
 
 };
 #endif
-
-//OPERADOR MENORRRRR

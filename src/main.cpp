@@ -35,3 +35,14 @@ int main(int argc, char ** argv){
 	sort(children);
 	merge(chidrebeg,childrenend,...)
 */
+
+/*
+	To do:
+	 * Finish middle todos
+	 * include opoen and closed
+
+	 * CREATE AGENT
+	 * Create astar inside
+	 * Main
+
+*/

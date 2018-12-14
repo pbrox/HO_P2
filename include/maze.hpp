@@ -30,13 +30,13 @@ class Maze{
 		~Maze();
 
 		//returns true when the given position is goal
-		bool isGoal(int row, int col) ;
+		bool isGoal(int row, int col) const ;
 
 		//overloading () operator to obtain the current cell
-		cell_type& operator()(int row, int col);
+		cell_type operator()(int row, int col) const;
 
 		//printing the map (for debug)
-		void print();
+		void print() const;
 
 		//Grid dimensions
 		int xdim;
