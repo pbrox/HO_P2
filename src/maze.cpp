@@ -18,7 +18,7 @@ Maze::~Maze(){
 }
 
 //Constructor
-Maze::Maze(std::string path){
+Maze::Maze(std::string path, heuristic_funcs h_funct){
 
 		//Parameters needed for new state (initial)
 		std::set<std::pair<int,int>> keys;
@@ -103,7 +103,7 @@ Maze::Maze(std::string path){
 			inputMap.close(); //Closing the file	
 
 			//Creating initial state
-			initial_state = std::make_unique<t_state>(keys, stones, al, 0, h_default);
+			initial_state = std::make_unique<t_state>(keys, stones, al, 0, h_funct);
 
 		} catch(std::exception &e){
 			inputMap.close(); //Closing the file

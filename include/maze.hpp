@@ -14,6 +14,7 @@
 
 //Antipated declaration to avoid circular dependencies 
 class t_state;
+enum heuristic_funcs : short;
 
 //enum to determine cell states
 enum cell_type {empty, snake, wall};
@@ -24,7 +25,7 @@ class Maze{
 
 	public:
 		//Constructor
-		Maze(std::string path); //Reads the maze from file and creates it
+		Maze(std::string path, heuristic_funcs h_funct); //Reads the maze from file and creates it
 
 		//Destructor
 		~Maze();

@@ -10,8 +10,8 @@
 #include <algorithm>
 
 
-enum moves{up, down, left, right};
-enum heuristic_funcs{h_default};
+enum moves {up, down, left, right};
+enum heuristic_funcs : short{h_default};
 
 //Antipated declaration to avoid circular dependencies 
 class Maze;
@@ -26,7 +26,12 @@ class t_state{
 		
 		~t_state();
 
-		void get_position(int &x, int &y); //returns the AL position
+		void get_position(int &x, int &y) const; //returns the AL position
+
+		std::pair<int,int> get_position() const{ //Another version returning pairs
+			return AL_position;
+		}
+
 		bool can_move(moves move, const Maze & map); //returns true if for the given state and the maze the movement move is executable
 
 				/*			 WARNING! 
@@ -66,7 +71,7 @@ class t_state{
 		heuristic_funcs used_heuristic;
 
 		//Heuristic functions collection
-		int heuristic(heuristic_funcs choosen = h_default); //Heuristic function
+		int heuristic(heuristic_funcs choosen); //Heuristic function
 		int default_h();
 
 		//Function returning next position (no checks)

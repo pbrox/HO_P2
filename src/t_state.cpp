@@ -5,7 +5,7 @@ t_state::~t_state(){
 
 }
 //Returns the position in the state
-void t_state::get_position(int &x, int &y){
+void t_state::get_position(int &x, int &y) const{
 
 	x = AL_position.first;
 	y = AL_position.second;
@@ -126,7 +126,7 @@ t_state t_state::move(moves move){
 	new_state.AL_position = new_pos;
 
 	//computing the new heuristics
-	new_state.heuristic_v = heuristic();
+	new_state.heuristic_v = heuristic(used_heuristic);
 
 	//Returning new state
 	return new_state;
@@ -191,7 +191,7 @@ bool t_state::operator== (const t_state &rhs) const{
 
 	//Now in stones (as we do not care about order here)
 	//Now check that every element of one is in the other
-	for(auto i : rhs.stones){
+	for(auto &i : rhs.stones){
 		if(std::find(this->stones.begin(), this->stones.end(),i) == this->stones.end()) return false;
 	}
 
@@ -229,12 +229,12 @@ void t_state::print(){
 	std::cout << "[STATE INFO]\n";
 	std::cout << "AL --> ROW [" << AL_position.first << "] COL [" << AL_position.second << "]\n";
 	std::cout << "KEYS SET { \n";
-	for(auto i : keys){
+	for(auto &i : keys){
 		std::cout << "\tKEY ->[" << i.first << " ," << i.second << "]\n";
 	}
 	std::cout << "}\n";
 	std::cout << "STONES SET { \n";
-	for (auto i : stones){
+	for (auto &i : stones){
 		std::cout << "\tSTONE ->[" << i.first << " ," << i.second << "]\n";
 	}
 	std::cout << "}\n";
