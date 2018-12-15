@@ -239,6 +239,6 @@ void t_state::print(){
 	}
 	std::cout << "}\n";
 	std::cout << "G = " << g << " HEURISTIC_VAL = " << heuristic_v << '\n';
-	std::cout << "HEURISTIC FUNCTION is " << used_heuristic << '\n' << "[END STATE]\n";
+	std::cout << "F FUNCTION is " << g+heuristic_v << '\n' << "[END STATE]\n";
 
 }

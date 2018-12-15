@@ -5,20 +5,14 @@
 #include "t_state.hpp"
 #include <vector>
 #include <array>
+#include <algorithm>    // std::lower_bound, std::upper_bound, std::sort
 
-/*
-	TO OD:
-	* Insert sorted!
-	* Implementation!
-
-*/
-
-class open_list(){
+class open_list{
 
 	public:
 		//Constructor
-		open_list(int max_heuristic);
-		~ open_list {}
+		open_list(int max_heuristic_val):  minimum(max_heuristic_val), number_nodes(0), container(max_heuristic_val) {}
+		~open_list() {}
 
 		//Adding a new state
 		void push(const astar_node & state);
@@ -38,18 +32,9 @@ class open_list(){
 		int number_nodes;
 
 		//Container (Data structure) itself
-		std::array<std::vector<astar_node>> container;
-
-		//Returns the new minimum index after pushing
-		int new_min();
+		std::vector<std::vector<astar_node>> container;
 };
 
 #endif
-//TO DO: implementation
 
-/*
-Remarks: ->1 operador menor funcion compare para upper boud
-2 -> upper boud
-3-> insert upper bound
-and be happy 
-*/
+

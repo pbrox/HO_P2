@@ -9,10 +9,6 @@
 //Compile with --std=c++17 or higher
 #include <algorithm>
 
-/*
-
-	TODO:
-*/
 
 enum moves{up, down, left, right};
 enum heuristic_funcs{h_default};

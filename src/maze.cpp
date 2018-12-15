@@ -10,13 +10,6 @@ class constExc: public std::runtime_error
         {}
 };
 
-/*
-	TO DO:
-
-	
-*/
-
-
 //Maze class implementation
 
 //Destructor
