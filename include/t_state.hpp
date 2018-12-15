@@ -8,10 +8,11 @@
 #include <optional>
 //Compile with --std=c++17 or higher
 #include <algorithm>
+#include <cstdlib>
 
 
 enum moves {up, down, left, right};
-enum heuristic_funcs : short{h_default};
+enum heuristic_funcs : short{h_default, min_k_mahattan};
 
 //Antipated declaration to avoid circular dependencies 
 class Maze;
@@ -21,8 +22,8 @@ class t_state{
 	public:
 
 		//Constructor for the initial state
-		t_state( std::set<std::pair<int,int>> keys, std::vector<std::pair<int,int>> stones, std::pair<int,int> al,  int cost, heuristic_funcs heuristic_choosen) :
-		keys(keys), stones(stones), AL_position(al), g(cost), used_heuristic(heuristic_choosen) {heuristic_v = heuristic(used_heuristic);}
+		t_state( std::set<std::pair<int,int>> keys, std::vector<std::pair<int,int>> stones, std::pair<int,int> al,  int cost, heuristic_funcs heuristic_choosen, const std::pair<int,int> &goal ) :
+		keys(keys), stones(stones), AL_position(al), g(cost), used_heuristic(heuristic_choosen) {heuristic_v = heuristic(used_heuristic, goal);}
 		
 		~t_state();
 
@@ -42,7 +43,7 @@ class t_state{
 					ked beforehand with can_move.
 				*/
 
-		t_state move(moves move); //returns the state generated executing operation move
+		t_state move(moves move, const Maze &map); //returns the state generated executing operation move
 		
 		bool is_final(const Maze & map); // returns true if the state is final
 
@@ -71,13 +72,16 @@ class t_state{
 		heuristic_funcs used_heuristic;
 
 		//Heuristic functions collection
-		int heuristic(heuristic_funcs choosen); //Heuristic function
+		int heuristic(heuristic_funcs choosen,const std::pair<int,int> &goal); //Heuristic function
+		
+		//Heuristic returning always 0
 		int default_h();
+
+		//Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
+		int min_mahattan_key(const std::pair<int,int> &goal);
 
 		//Function returning next position (no checks)
 		std::pair<int,int> next_pos(moves move, std::optional<std::pair<int,int>> from);
-
-
 
 };
 

@@ -103,7 +103,7 @@ Maze::Maze(std::string path, heuristic_funcs h_funct){
 			inputMap.close(); //Closing the file	
 
 			//Creating initial state
-			initial_state = std::make_unique<t_state>(keys, stones, al, 0, h_funct);
+			initial_state = std::make_unique<t_state>(keys, stones, al, 0, h_funct, std::make_pair(goal[1], goal[0]));
 
 		} catch(std::exception &e){
 			inputMap.close(); //Closing the file

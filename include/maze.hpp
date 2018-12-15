@@ -39,6 +39,12 @@ class Maze{
 		//printing the map (for debug)
 		void print() const;
 
+		//getting goal row
+		int goal_row() const {return goal[1];}
+		
+		//getting goal column
+		int goal_column() const {return goal[0];}
+
 		//Grid dimensions
 		int xdim;
 		int ydim;

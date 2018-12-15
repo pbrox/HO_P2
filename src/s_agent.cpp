@@ -74,16 +74,16 @@ std::vector<astar_node> s_agent::expand(const astar_node & current){
 
 	//Now for each possible movement, check if it possible withim the Maze, if so, insert it
 	//Up
-	if(mid_state.first.can_move(up, map)) to_return.push_back(std::make_pair(mid_state.first.move(up),mid_state.second));
+	if(mid_state.first.can_move(up, map)) to_return.push_back(std::make_pair(mid_state.first.move(up, map),mid_state.second));
 
 	//Down
-	if(mid_state.first.can_move(down, map)) to_return.push_back(std::make_pair(mid_state.first.move(down),mid_state.second));
+	if(mid_state.first.can_move(down, map)) to_return.push_back(std::make_pair(mid_state.first.move(down, map),mid_state.second));
 
 	//Left
-	if(mid_state.first.can_move(left, map)) to_return.push_back(std::make_pair(mid_state.first.move(left),mid_state.second));
+	if(mid_state.first.can_move(left, map)) to_return.push_back(std::make_pair(mid_state.first.move(left, map),mid_state.second));
 
 	//Right
-	if(mid_state.first.can_move(right, map)) to_return.push_back(std::make_pair(mid_state.first.move(right),mid_state.second));
+	if(mid_state.first.can_move(right, map)) to_return.push_back(std::make_pair(mid_state.first.move(right, map),mid_state.second));
 
 	//Satistics adding one to expanded node
 	total_expansions++;

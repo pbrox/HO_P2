@@ -100,7 +100,7 @@ bool t_state::can_move(moves move, const Maze &map){
 */
 
 //returns the state generated executing operation move
-t_state t_state::move(moves move){
+t_state t_state::move(moves move, const Maze &map){
 
 	//Obtaining an element to copy
 	auto new_state = *this;
@@ -126,19 +126,21 @@ t_state t_state::move(moves move){
 	new_state.AL_position = new_pos;
 
 	//computing the new heuristics
-	new_state.heuristic_v = heuristic(used_heuristic);
+	new_state.heuristic_v = heuristic(used_heuristic, std::make_pair(map.goal_row(), map.goal_column()));
 
 	//Returning new state
 	return new_state;
 }
 
 //Heuristic function of the current state
-int t_state::heuristic(heuristic_funcs choosen){
+int t_state::heuristic(heuristic_funcs choosen, const std::pair<int,int> &goal){
 
 	//Swiches between availabe heuristics and returns choosen one
 	switch (choosen){
 		case h_default:
 			return default_h();
+		case min_k_mahattan:
+			return min_mahattan_key(goal);
 		default:
 			return -1; //Returns a negative vaue if error
 	}
@@ -177,9 +179,27 @@ std::pair<int,int> t_state::next_pos(moves move, std::optional<std::pair<int,int
 	//No need returning value since all cases covered
 }
 
-//Default heuristic function (to fill)
+//Default heuristic function
 int t_state::default_h(){
 	return 0;
+}
+
+//Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
+int t_state::min_mahattan_key(const std::pair<int,int> &goal){
+
+	//If only the goal is to reach (no keys left) retun mh to the goal
+	if(keys.size() == 0) return std::abs(AL_position.first - goal.first) + std::abs(AL_position.second - goal.second);
+
+	//Compute MH to each key
+	int min_dst = std::numeric_limits<int>::max(); //Set to maximum
+	for(auto & i : keys) {
+		//Compue mh distance to key
+		int mh_k = std::abs(AL_position.first - i.first) + std::abs(AL_position.second - i.second);
+		//If it is less than the minimum change the minimum
+		min_dst = (mh_k < min_dst) ? mh_k : min_dst;
+	}
+
+	return min_dst;
 }
 
 //Equal operator

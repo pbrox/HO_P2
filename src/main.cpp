@@ -62,13 +62,15 @@ void print_help(){
 	std::cout << "Usage AstarPaganitzu map heuristic\n";
 	std::cout << "\tmap: Path to the map file\n";
 	std::cout << "\theuristic: heuristic to use, available are:\n";
-	std::cout << "\t\t default_heuristic: returns 1, making djsktra\n";
+	std::cout << "\t\t default_heuristic: returns 0, making djsktra\n";
+	std::cout << "\t\t min_mahattan_key: Minimum manhattan to a key or to the goal if no keys\n";
 	std::cout << "\n use AstarPaganitzu --help to see this page\n";
 }
 
 //function that matches each posible heuristic input into an heuristic_funcs type
 heuristic_funcs parse_heuristic(std::string to_use){
 	if (to_use == "default_heuristic") return h_default;
+	if(to_use == "min_mahattan_key") return min_k_mahattan;
 	else return h_default;
 }
 
