@@ -67,7 +67,7 @@ void s_agent::do_search(){
 //Returns possible children for a given parent
 std::vector<astar_node> s_agent::expand(const astar_node & current){
 
-	//Generate the empty vecto
+	//Generate the empty vector
 	std::vector<astar_node> to_return;
 
 	//Generate the base state adding the father position to the path, NOT CHANGING ANCTUAL STATE BY NOW

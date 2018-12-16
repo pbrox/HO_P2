@@ -233,7 +233,7 @@ bool t_state::operator< (const t_state &rhs) const{
 	std::sort(v2.begin(), v2.end());
 
 	//Comparing lexicogafical (bare in mind they have aways same length) eemet by element
-	for( size_t  i= 0; i < v1.size(); ++i) if(v1[i] != v2[i]) return v1[1] < v2[i];
+	for( size_t  i= 0; i < v1.size(); ++i) if(v1[i] != v2[i]) return v1[i] < v2[i];
 
 	//Finaly, we go with the keys
 	if(keys != rhs.keys) return keys < rhs.keys;
