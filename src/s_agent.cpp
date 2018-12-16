@@ -31,6 +31,8 @@ void s_agent::do_search(){
 			path_end = to_expand.second;
 			//Getting solution cost
 			total_cost = to_expand.first.get_g();
+			//Adding itself to path
+			path_end.push_back(to_expand.first.get_position());
 			break; //End Astar
 		}
 
