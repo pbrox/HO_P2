@@ -1,1 +1,8 @@
-build
+#C++ binaries
+part2/build
+
+#Java binaries
+
+#MAC hateful files
+.DS_Store
+.DS_Store?
