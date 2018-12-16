@@ -11,8 +11,9 @@ heuristic_funcs parse_heuristic(std::string to_use);
 
 int main(int argc, char ** argv){
 
+	bool verbose_flag = false;
 	//Parsing arguments
-	if(argc < 3){ //If incorrect
+	if(argc < 3 || argc > 4){ //If incorrect
 		if(argc == 2 && std::string(argv[1]) == "--help"){ //Either help
 			print_help(); //Print help
 			return 0;
@@ -22,9 +23,25 @@ int main(int argc, char ** argv){
 		std::cout << "Incorrect arguments, use AstarPaganitzu --help to view help\n";
 		return -1;
 	}
+
+	//Additionally vervose option
+	if(argc == 4){
+		if(std::string(argv[3]) == "--verbose") verbose_flag = true;
+		else{
+			//If the verbose option is incorrect exit
+			std::cout << "Incorrect arguments, use AstarPaganitzu --help to view help\n";
+			return -1;
+		}
+	}
+
 	
 	//Create an agent eith the given map and heuristic functions
-	s_agent c_agent(argv[1], parse_heuristic(std::string(argv[2])));
+	heuristic_funcs to_use = parse_heuristic(std::string(argv[2]));
+	if(int(to_use) == -1 ){
+		std::cout << "Incorrect arguments, use AstarPaganitzu --help to view help\n";
+		return -1;
+	}
+	s_agent c_agent(argv[1], to_use);
 	//Execute the Astar inside the agent
 	c_agent.do_search();
 
@@ -49,9 +66,12 @@ int main(int argc, char ** argv){
 	c_agent.print_statistics(file_to_write); //Write statistics to file
 	file_to_write.close(); //Close the file
 
-	//Debug -- erase of the final vesion
-	c_agent.print_result(std::cout);
-	c_agent.print_statistics(std::cout);
+	//verbose printinf the results if flag enabled
+	if(verbose_flag){
+		c_agent.print_result(std::cout);
+		c_agent.print_statistics(std::cout);
+	}
+
 	return 0;
 
 }
@@ -71,14 +91,5 @@ void print_help(){
 heuristic_funcs parse_heuristic(std::string to_use){
 	if (to_use == "default_heuristic") return h_default;
 	if(to_use == "min_mahattan_key") return min_k_mahattan;
-	else return h_default;
+	else return heuristic_funcs(-1);
 }
-
-
-/*
-	To do:
-	 
-	 * Main
-	 * HELP
-
-*/
