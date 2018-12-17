@@ -101,7 +101,7 @@ bool t_state::can_move(moves move, const Maze &map){
 
 //returns the state generated executing operation move
 t_state t_state::move(moves move, const Maze &map){
-
+	
 	//Obtaining an element to copy
 	auto new_state = *this;
 
@@ -126,7 +126,7 @@ t_state t_state::move(moves move, const Maze &map){
 	new_state.AL_position = new_pos;
 
 	//computing the new heuristics
-	new_state.heuristic_v = heuristic(used_heuristic, std::make_pair(map.goal_row(), map.goal_column()));
+	new_state.heuristic_v = new_state.heuristic(used_heuristic, std::make_pair(map.goal_row(), map.goal_column()));
 
 	//Returning new state
 	return new_state;
@@ -191,15 +191,15 @@ int t_state::min_mahattan_key(const std::pair<int,int> &goal){
 	if(keys.size() == 0) return std::abs(AL_position.first - goal.first) + std::abs(AL_position.second - goal.second);
 
 	//Compute MH to each key
-	int min_dst = std::numeric_limits<int>::max(); //Set to maximum
+	int sum = 0;
 	for(auto & i : keys) {
 		//Compue mh distance to key
 		int mh_k = std::abs(AL_position.first - i.first) + std::abs(AL_position.second - i.second);
 		//If it is less than the minimum change the minimum
-		min_dst = (mh_k < min_dst) ? mh_k : min_dst;
+		sum += mh_k;
 	}
 
-	return min_dst;
+	return sum;
 }
 
 //Equal operator
