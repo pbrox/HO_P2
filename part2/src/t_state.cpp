@@ -126,23 +126,23 @@ t_state t_state::move(moves move, const Maze &map){
 	new_state.AL_position = new_pos;
 
 	//computing the new heuristics
-	new_state.heuristic_v = new_state.heuristic(used_heuristic, std::make_pair(map.goal_row(), map.goal_column()), map.initial_state->keys.size());
+	new_state.heuristic_v = new_state.heuristic(used_heuristic, std::make_pair(map.goal_row(), map.goal_column()));
 
 	//Returning new state
 	return new_state;
 }
 
 //Heuristic function of the current state
-int t_state::heuristic(heuristic_funcs choosen, const std::pair<int,int> &goal, int total_keys){
+int t_state::heuristic(heuristic_funcs choosen, const std::pair<int,int> &goal){
 
 	//Swiches between availabe heuristics and returns choosen one
 	switch (choosen){
 		case h_default:
 			return default_h();
 		case min_k_mahattan:
-			return min_mahattan_key(goal, total_keys);
+			return min_mahattan_key(goal);
 		case sum_k_mahattan:
-			return sum_mahattan_key(goal, total_keys);
+			return sum_mahattan_key(goal);
 		default:
 			return -1; //Returns a negative vaue if error
 	}
@@ -187,43 +187,48 @@ int t_state::default_h(){
 }
 
 //Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
-int t_state::min_mahattan_key(const std::pair<int,int> &goal, int total_keys){
+int t_state::min_mahattan_key(const std::pair<int,int> &goal){
 
 	//If only the goal is to reach (no keys left) retun mh to the goal
 	if(keys.size() == 0) return std::abs(AL_position.first - goal.first) + std::abs(AL_position.second - goal.second);
 
-	//Compute MH to each key
+	//Compute MH to each key and from each key to the goal, take both
 	int min_dst = std::numeric_limits<int>::max(); //Set to maximum
+	int min_k_g =  std::numeric_limits<int>::max(); //Set to maximum
 	for(auto & i : keys) {
-		//Compue mh distance to key
+		//Compue mh distance to key and from key to goal
 		int mh_k = std::abs(AL_position.first - i.first) + std::abs(AL_position.second - i.second);
-		//If it is less than the minimum change the minimum
+		int ming = std::abs(i.first -goal.first) + std::abs(i.second -goal.second);
+		//If it is less than the minimum change the minimum (for both)
 		min_dst = (mh_k < min_dst) ? mh_k : min_dst;
+		min_k_g = (ming < min_k_g) ? ming: min_k_g;
 	}
 
-	return min_dst*(keys.size()/total_keys);
+	return min_dst*((keys.size()))+min_k_g;
+	//Return the minimum distance times keys left plus the distance from the closest key to the goal
 }
 
 //Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
-int t_state::sum_mahattan_key(const std::pair<int,int> &goal, int total_keys){
+int t_state::sum_mahattan_key(const std::pair<int,int> &goal){
 
 	//If only the goal is to reach (no keys left) retun mh to the goal
 	if(keys.size() == 0) return std::abs(AL_position.first - goal.first) + std::abs(AL_position.second - goal.second);
 
-	//Compute MH to each key
-	int sum = 0; //Set to maximum
+	//Compute MH to each key and from each to the goal
+	int sum = 0; //Set to 0
+	int min_k_g =  std::numeric_limits<int>::max(); //Set to maximum (obtaining min)
 	for(auto & i : keys) {
 		//Compue mh distance to key
 		int mh_k = std::abs(AL_position.first - i.first) + std::abs(AL_position.second - i.second);
 		//If it is less than the minimum change the minimum
 		sum += mh_k;
+
+		//Distancet to the goal, update minimum
+		int ming = std::abs(i.first -goal.first) + std::abs(i.second -goal.second);
+		min_k_g = (ming < min_k_g) ? ming: min_k_g;
 	}
-
-	//Sum modification
-	//sum /=2;
-	sum *= (keys.size()/total_keys);
-
-	return sum;
+	//Return the sum of manhattan keys and the distance from the closest key to the goal
+	return sum+min_k_g;
 }
 
 
