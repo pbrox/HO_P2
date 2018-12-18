@@ -103,7 +103,8 @@ bool s_agent::print_result(std::ostream & flux_to){
 		flux_to << "Search Agent was not able to find a solution for your problem\n";
 		return true;
 	}
-
+	//Print map
+	map.print(flux_to);
 	//Print path
 	flux_to << "{ ";
 	for(auto &i : path_end) flux_to << "(" << i.first << "," << i.second << ") "  << std::string((&i != &path_end.back()) ? "-> " : "");

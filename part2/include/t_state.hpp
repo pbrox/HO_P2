@@ -62,6 +62,12 @@ class t_state{
 		//Getting G
 		int get_g() const {return g;}
 
+		//getting if it is stone
+		bool is_stone(std::pair<int,int> to_check){return std::find(stones.begin(), stones.end(), to_check) != stones.end();}
+
+		//getting if it is a key
+		bool is_key(std::pair<int,int> key){return keys.count(key);}
+
 
 	private:
 		std::set<std::pair<int,int>> keys; //Set containing all the remaining keys
