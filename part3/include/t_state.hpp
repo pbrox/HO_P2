@@ -11,7 +11,7 @@
 #include <cstdlib>
 
 
-enum moves {up, down, left, right};
+enum moves {up, down, left, right, up_left, up_right, down_left, down_right};
 enum heuristic_funcs : short{h_default, min_k_mahattan, sum_k_mahattan, bad_h};
 
 //Antipated declaration to avoid circular dependencies 

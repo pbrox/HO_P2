@@ -174,6 +174,14 @@ std::pair<int,int> t_state::next_pos(moves move, std::optional<std::pair<int,int
 			return std::make_pair(curr_i, curr_j-1);
 		case right: //Moving the next column
 			return std::make_pair(curr_i, curr_j+1);
+		case up_left: //moving the before row, previous column
+			return std::make_pair(curr_i-1,curr_j-1);
+		case down_left: //moving the next row, previous column
+			return std::make_pair(curr_i+1, curr_j-1);
+		case up_right: //moving the before row, next column
+			return std::make_pair(curr_i-1,curr_j+1);
+		case down_right: //moving the next row, next column
+			return std::make_pair(curr_i+1, curr_j+1);
 		default:
 			return std::make_pair(-1,-1); //Impossible possition in case bad argument
 	}
