@@ -27,8 +27,10 @@ public class SATPaganitzu {
 		int nColumnas = 0;
 		int nFilas = 0;
 
-		// Abrimos el archivo
-		// Guardamos en una matriz las posiciones libres del mazo
+		/*
+		The input file is opened
+		We store the maze on a data structure
+		*/
 
 		try{
 			File f = new File(name);
@@ -38,16 +40,14 @@ public class SATPaganitzu {
 			nColumnas = linea.length();
 		while(linea!=null){
 			ArrayList<Character> auxM = new ArrayList();
+
+			//We take the maximum rectangule contained in the map
 			if(linea.length()<nColumnas) nColumnas = linea.length();
-			/*
-			for(int i = 0;i<nSnakes; i++){
-				ArrayList<Boolean> auxF = new ArrayList();
-				filasSnakes[i].add(auxF);
-			}*/
 			for(int j = 0; j<linea.length();++j){
-				if(linea.charAt(j)=='S'||linea.charAt(j)=='K'||linea.charAt(j)=='E'||linea.charAt(j)=='%'||linea.charAt(j)=='O') auxM.add(linea.charAt(j));
-				else if(linea.charAt(j)==' ') auxM.add(' ');
-				//else System.out.println("WRONG MAZE: bad caracters would appear in the output with a W"); auxM.add('W');
+
+				//Wrong input Characters should be ignore and they won't appear in the output
+				if(linea.charAt(j)=='K'||linea.charAt(j)=='E'||linea.charAt(j)=='%'||linea.charAt(j)=='O'||linea.charAt(j)==' ') auxM.add(linea.charAt(j));
+				else auxM.add(' ');
 			}
 			maze.add(auxM);
 			nFilas++;
@@ -56,19 +56,14 @@ public class SATPaganitzu {
 	}catch(Exception e){ e.printStackTrace();};
 
 
-
-
-
-
 		Store store = new Store();
 		SatWrapper satWrapper = new SatWrapper();
 		store.impose(satWrapper);
 
-		// Todas las variables: es necesario para el SimpleSelect
-
+		//Storing all the variables
 		BooleanVar[] allVariables = new BooleanVar[(nSnakes+1)*(nFilas+nColumnas)];
 
-		// Creación de las variables
+		// Creation of variables
 		for(int i = 0; i<nSnakes;++i){
 			ArrayList <BooleanVar> auxSc = new ArrayList();
 			for(int k = 0; k<nColumnas;++k){
@@ -105,7 +100,7 @@ public class SATPaganitzu {
 
 
 
-		// Obtenemos los literales no negados de las variables
+		// Obtaining non negated literals
 		int [][] literalColumnas= new int[nSnakes+1][nColumnas];
 		int [][] literalFilas= new int[nSnakes+1][nFilas];
 		for(int s = 0; s<nSnakes+1;++s){
@@ -120,81 +115,51 @@ public class SATPaganitzu {
 			}
 		}
 
-
-
-
-		// Imponemos las restricciones
+		// Imposing Constraints
 		for(int s = 0; s<nSnakes+1; ++s){
 			for(int i = 0; i<nFilas; ++i){
 
-				//two snakes cannot be placed in the same row (also Al cannot be in the same row)
+				//two snakes cannot be placed in the same row (also Al cannot be in the same row) x
 				for(int e = s+1; e<nSnakes+1;e++){
 					addClause(satWrapper, -literalFilas[s][i], -literalFilas[e][i]);
 
 				}
 
 				for(int j = 0; j<nColumnas;++j){
-						//Verificamos que haya hueco en el mapa
+
+						//Only if there is a free space can be located x
 						if(maze.get(i).get(j)!=' ') addClause(satWrapper, -literalFilas[s][i], -literalColumnas[s][j]);
-						if(s<nSnakes) 	addClause(satWrapper, -literalColumnas[nSnakes][j], -literalColumnas[s][j]);
 				}
+
+				//Only one row can be activated on the same snake/Al x
+				for(int j = i+1; j<nFilas; ++j) addClause(satWrapper, -literalFilas[s][i], -literalFilas[s][j]);
 			}
-			for(int j = 0; j<nColumnas;++j){
-					//Verificamos que no haya snakes en la misma columna que Al
-					if(s<nSnakes) 	addClause(satWrapper, -literalColumnas[nSnakes][j], -literalColumnas[s][j]);
+
+			for(int i = 0; i<nColumnas; ++i){
+
+				//A snake cannot be in the same place as Al x
+				if(s<nSnakes) 	addClause(satWrapper, -literalColumnas[nSnakes][i], -literalColumnas[s][i]);
+
+				//Only one column could be activated on the same snake/Al x
+				for(int j = i+1; j<nColumnas; ++j)	addClause(satWrapper, -literalColumnas[s][i], -literalColumnas[s][j]);
 			}
+
+			//All the snakes/Al must be placed somewhere on the maze
+			//At least one column has to be activated
+			IntVec clauseC = new IntVec(satWrapper.pool);
+			for(int i = 0; i<nColumnas; ++i) clauseC.add(literalColumnas[s][i]);
+			satWrapper.addModelClause(clauseC.toArray());
+			//At least one row has to be activated
+			IntVec clauseF = new IntVec(satWrapper.pool);
+			for(int i = 0; i<nFilas; ++i) clauseF.add(literalFilas[s][i]);
+			satWrapper.addModelClause(clauseF.toArray());
+
 		}
 
 
-		 for(int s = 0; s<nSnakes+1; ++s){
-			 //IMPONER QUE SI UNA ROW SE ACTIVA NO SE PUEDE ACTIVAR OTRA DEL MISMO SNAKE/AL
-			 for(int i = 0; i<nFilas; ++i){
-				 for(int j = i+1; j<nFilas; ++j) addClause(satWrapper, -literalFilas[s][i], -literalFilas[s][j]);
-			 }
-			 //IMPONER QUE SI UNA COLUMN SE ACTIVA NO SE PUEDE ACTIVAR OTRA DEL MISMO SNAKE/AL
-			 for(int i = 0; i<nColumnas; ++i){
-				 for(int j = i+1; j<nColumnas; ++j)	addClause(satWrapper, -literalColumnas[s][i], -literalColumnas[s][j]);
-			 }
 
-			 //IMPONER QUE SI UNA ROW SE ACTIVA UNA COLUMNA
-			 for(int i = 0; i<nFilas; ++i){
-				 IntVec clause = new IntVec(satWrapper.pool);
-				 clause.add(-literalFilas[s][i]);
-				 for(int j = 0; j<nColumnas; ++j){
-			 		clause.add(literalColumnas[s][j]);
-				 }
-				 satWrapper.addModelClause(clause.toArray());
-			 }
-
-			 //IMPONER QUE SI UNA COLUMN SE ACTIVA UNA ROW
-			 for(int i = 0; i<nColumnas; ++i){
-				 IntVec clause = new IntVec(satWrapper.pool);
-				 clause.add(-literalColumnas[s][i]);
-				 for(int j = 0; j<nFilas; ++j){
-			 		clause.add(literalFilas[s][j]);
-				 }
-				 satWrapper.addModelClause(clause.toArray());
-			 }
-
-			 //IMPONER QUE AL MENOS SE ACTIVE UNA ROW Y UNA COLUMN DE CADA SNAKE Y AL
-			 IntVec clauseC = new IntVec(satWrapper.pool);
-			 for(int i = 0; i<nColumnas; ++i) clauseC.add(literalColumnas[s][i]);
-			 satWrapper.addModelClause(clauseC.toArray());
-
-			 IntVec clauseF = new IntVec(satWrapper.pool);
-			 for(int i = 0; i<nFilas; ++i) clauseF.add(literalFilas[s][i]);
-			 satWrapper.addModelClause(clauseF.toArray());
-
-		 }
-
-
-
-
-
-
-	    Search<BooleanVar> search = new DepthFirstSearch<BooleanVar>();
-		SelectChoicePoint<BooleanVar> select = new SimpleSelect<BooleanVar>(allVariables,
-							 new SmallestDomain<BooleanVar>(), new IndomainMin<BooleanVar>());
+	  Search<BooleanVar> search = new DepthFirstSearch<BooleanVar>();
+		SelectChoicePoint<BooleanVar> select = new SimpleSelect<BooleanVar>(allVariables, new SmallestDomain<BooleanVar>(), new IndomainMin<BooleanVar>());
 		Boolean result = search.labeling(store, select);
 
 		if (result) {
@@ -223,13 +188,11 @@ public class SATPaganitzu {
 					}
 				}
 
-			}else System.out.println("NO RESULT FOUND");
+			}else System.out.println("NO RESULT FOUND AND NO OUTPUT GENERATED");
 
 		System.out.println();
 		finalOutput(maze, name);
 	}
-
-
 
 	public static void addClause(SatWrapper satWrapper, int literal1, int literal2){
 		IntVec clause = new IntVec(satWrapper.pool);
@@ -239,6 +202,8 @@ public class SATPaganitzu {
 	}
 
 	public static void finalOutput(ArrayList <ArrayList<Character>> maze, String name){
+
+		//creation of the output file
 		try {
 			Writer writer = new BufferedWriter(new OutputStreamWriter(
               new FileOutputStream(name+".output"), "utf-8"));
