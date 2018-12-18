@@ -6,3 +6,7 @@ part3/build
 #MAC hateful files
 .DS_Store
 .DS_Store?
+
+#outputs
+.output
+.statistic
