@@ -63,7 +63,7 @@ public class SATPaganitzu {
 		//Storing all the variables
 		BooleanVar[] allVariables = new BooleanVar[(nSnakes+1)*(nFilas+nColumnas)];
 
-		// Creation of variables
+		// Creation of variables for snakes
 		for(int i = 0; i<nSnakes;++i){
 			ArrayList <BooleanVar> auxSc = new ArrayList();
 			for(int k = 0; k<nColumnas;++k){
@@ -85,6 +85,7 @@ public class SATPaganitzu {
 
 		}
 
+		// Creation of variables for Al
 		for(int i = 0;  i<nColumnas; ++i){
 			BooleanVar auxBv = new BooleanVar(store, "Hay un Al en la columna "+i);
 			columnasAl.add(auxBv);
@@ -119,7 +120,7 @@ public class SATPaganitzu {
 		for(int s = 0; s<nSnakes+1; ++s){
 			for(int i = 0; i<nFilas; ++i){
 
-				//two snakes cannot be placed in the same row (also Al cannot be in the same row) x
+				//two snakes cannot be placed in the same row (also Al cannot be in the same row)
 				for(int e = s+1; e<nSnakes+1;e++){
 					addClause(satWrapper, -literalFilas[s][i], -literalFilas[e][i]);
 
@@ -127,20 +128,20 @@ public class SATPaganitzu {
 
 				for(int j = 0; j<nColumnas;++j){
 
-						//Only if there is a free space can be located x
+						//Only if there is a free space can be located
 						if(maze.get(i).get(j)!=' ') addClause(satWrapper, -literalFilas[s][i], -literalColumnas[s][j]);
 				}
 
-				//Only one row can be activated on the same snake/Al x
+				//Only one row can be activated on the same snake/Al
 				for(int j = i+1; j<nFilas; ++j) addClause(satWrapper, -literalFilas[s][i], -literalFilas[s][j]);
 			}
 
 			for(int i = 0; i<nColumnas; ++i){
 
-				//A snake cannot be in the same place as Al x
+				//A snake cannot be in the same place as Al
 				if(s<nSnakes) 	addClause(satWrapper, -literalColumnas[nSnakes][i], -literalColumnas[s][i]);
 
-				//Only one column could be activated on the same snake/Al x
+				//Only one column could be activated on the same snake/Al
 				for(int j = i+1; j<nColumnas; ++j)	addClause(satWrapper, -literalColumnas[s][i], -literalColumnas[s][j]);
 			}
 
@@ -155,8 +156,6 @@ public class SATPaganitzu {
 			satWrapper.addModelClause(clauseF.toArray());
 
 		}
-
-
 
 	  Search<BooleanVar> search = new DepthFirstSearch<BooleanVar>();
 		SelectChoicePoint<BooleanVar> select = new SimpleSelect<BooleanVar>(allVariables, new SmallestDomain<BooleanVar>(), new IndomainMin<BooleanVar>());
@@ -175,18 +174,16 @@ public class SATPaganitzu {
 						}
 					}
 				}
-				System.out.println();
-
-				}
-				for(int i = 0; i<nFilas; ++i){
-					if(filasAl.get(i).dom().value()==1){
-						for(int j = 0; j<nColumnas; ++j){
-							if(columnasAl.get(j).dom().value()==1){
-								maze.get(i).set(j,'A');
-							}
+			}
+			for(int i = 0; i<nFilas; ++i){
+				if(filasAl.get(i).dom().value()==1){
+					for(int j = 0; j<nColumnas; ++j){
+						if(columnasAl.get(j).dom().value()==1){
+							maze.get(i).set(j,'A');
 						}
 					}
 				}
+			}
 
 			}else System.out.println("NO RESULT FOUND AND NO OUTPUT GENERATED");
 
@@ -218,5 +215,4 @@ public class SATPaganitzu {
 				writer.close();
 		} catch(Exception e){ e.printStackTrace();};
 	}
-
 }
