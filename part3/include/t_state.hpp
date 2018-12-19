@@ -11,8 +11,8 @@
 #include <cstdlib>
 
 
-enum moves {up, down, left, right};
-enum heuristic_funcs : short{h_default, min_k_mahattan, sum_k_mahattan, bad_h};
+enum moves {up, down, left, right, up_left, up_right, down_left, down_right};
+enum heuristic_funcs : short{h_default, sum_k_diagonal, bad_h};
 
 //Antipated declaration to avoid circular dependencies 
 class Maze;
@@ -22,7 +22,7 @@ class t_state{
 	public:
 
 		//Constructor for the initial state
-		t_state( std::set<std::pair<int,int>> keys, std::vector<std::pair<int,int>> stones, std::pair<int,int> al,  int cost, heuristic_funcs heuristic_choosen, const std::pair<int,int> &goal) :
+		t_state( std::set<std::pair<int,int>> keys, std::vector<std::pair<int,int>> stones, std::pair<int,int> al,  int cost, heuristic_funcs heuristic_choosen, const std::pair<int,int> &goal ) :
 		keys(keys), stones(stones), AL_position(al), g(cost), used_heuristic(heuristic_choosen) {heuristic_v = heuristic(used_heuristic, goal);}
 		
 		~t_state();
@@ -83,11 +83,8 @@ class t_state{
 		//Heuristic returning always 0
 		int default_h();
 
-		//Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
-		int min_mahattan_key(const std::pair<int,int> &goal);
-
 		//Heuristic returning the sum of the manhattan distances
-		int sum_mahattan_key(const std::pair<int,int> &goal);
+		int sum_diagonal_key(const std::pair<int,int> &goal);
 
 
 		//Function returning next position (no checks)

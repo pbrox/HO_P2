@@ -87,6 +87,18 @@ std::vector<astar_node> s_agent::expand(const astar_node & current){
 	//Right
 	if(mid_state.first.can_move(right, map)) to_return.push_back(std::make_pair(mid_state.first.move(right, map),mid_state.second));
 
+	//Up_right
+	if(mid_state.first.can_move(up_left, map)) to_return.push_back(std::make_pair(mid_state.first.move(up_left, map),mid_state.second));
+
+	//Up_right
+	if(mid_state.first.can_move(up_right, map)) to_return.push_back(std::make_pair(mid_state.first.move(up_right, map),mid_state.second));
+
+	//down_left
+	if(mid_state.first.can_move(down_left, map)) to_return.push_back(std::make_pair(mid_state.first.move(down_left, map),mid_state.second));
+
+	//down right
+	if(mid_state.first.can_move(down_right, map)) to_return.push_back(std::make_pair(mid_state.first.move(down_right, map),mid_state.second));
+
 	//Satistics adding one to expanded node
 	total_expansions++;
 

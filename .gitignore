@@ -1,8 +1,12 @@
 #C++ binaries
 part2/build
-
+part3/build
 #Java binaries
 .class
 #MAC hateful files
 .DS_Store
 .DS_Store?
+
+#outputs
+*.output
+*.statistics

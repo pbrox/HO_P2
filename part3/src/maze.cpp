@@ -133,6 +133,7 @@ cell_type Maze::operator()(int row, int col) const{
 
 
 //Printing the map for debugging 
+//Printing the map for debugging 
 void Maze::print(std::ostream & flux) const{
 
 	//checking map

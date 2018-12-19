@@ -139,10 +139,8 @@ int t_state::heuristic(heuristic_funcs choosen, const std::pair<int,int> &goal){
 	switch (choosen){
 		case h_default:
 			return default_h();
-		case min_k_mahattan:
-			return min_mahattan_key(goal);
-		case sum_k_mahattan:
-			return sum_mahattan_key(goal);
+		case sum_k_diagonal:
+			return sum_diagonal_key(goal);
 		default:
 			return -1; //Returns a negative vaue if error
 	}
@@ -174,6 +172,14 @@ std::pair<int,int> t_state::next_pos(moves move, std::optional<std::pair<int,int
 			return std::make_pair(curr_i, curr_j-1);
 		case right: //Moving the next column
 			return std::make_pair(curr_i, curr_j+1);
+		case up_left: //moving the before row, previous column
+			return std::make_pair(curr_i-1,curr_j-1);
+		case down_left: //moving the next row, previous column
+			return std::make_pair(curr_i+1, curr_j-1);
+		case up_right: //moving the before row, next column
+			return std::make_pair(curr_i-1,curr_j+1);
+		case down_right: //moving the next row, next column
+			return std::make_pair(curr_i+1, curr_j+1);
 		default:
 			return std::make_pair(-1,-1); //Impossible possition in case bad argument
 	}
@@ -186,48 +192,30 @@ int t_state::default_h(){
 	return 0;
 }
 
-//Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
-int t_state::min_mahattan_key(const std::pair<int,int> &goal){
 
-	//If only the goal is to reach (no keys left) retun mh to the goal
-	if(keys.size() == 0) return std::abs(AL_position.first - goal.first) + std::abs(AL_position.second - goal.second);
+//Heuristic returning the minimum diagonal distance to a key or the dd to the goal in case of empty
+int t_state::sum_diagonal_key(const std::pair<int,int> &goal){
 
-	//Compute MH to each key and from each key to the goal, take both
-	int min_dst = std::numeric_limits<int>::max(); //Set to maximum
-	int min_k_g =  std::numeric_limits<int>::max(); //Set to maximum
-	for(auto & i : keys) {
-		//Compue mh distance to key and from key to goal
-		int mh_k = std::abs(AL_position.first - i.first) + std::abs(AL_position.second - i.second);
-		int ming = std::abs(i.first -goal.first) + std::abs(i.second -goal.second);
-		//If it is less than the minimum change the minimum (for both)
-		min_dst = (mh_k < min_dst) ? mh_k : min_dst;
-		min_k_g = (ming < min_k_g) ? ming: min_k_g;
-	}
+	//If only the goal is to reach (no keys left) retun dd to the goal
+	if(keys.size() == 0) return std::min(std::abs(AL_position.first - goal.first), std::abs(AL_position.second - goal.second)) + 
+	std::abs(std::abs(AL_position.first - goal.first) - std::abs(AL_position.second - goal.second));
 
-	return min_dst*((keys.size()))+min_k_g;
-	//Return the minimum distance times keys left plus the distance from the closest key to the goal
-}
-
-//Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
-int t_state::sum_mahattan_key(const std::pair<int,int> &goal){
-
-	//If only the goal is to reach (no keys left) retun mh to the goal
-	if(keys.size() == 0) return std::abs(AL_position.first - goal.first) + std::abs(AL_position.second - goal.second);
-
-	//Compute MH to each key and from each to the goal
+	//Compute dd to each key and from each to the goal
 	int sum = 0; //Set to 0
 	int min_k_g =  std::numeric_limits<int>::max(); //Set to maximum (obtaining min)
 	for(auto & i : keys) {
 		//Compue mh distance to key
-		int mh_k = std::abs(AL_position.first - i.first) + std::abs(AL_position.second - i.second);
+		int mh_k = std::min(std::abs(AL_position.first - i.first), std::abs(AL_position.second - i.second)) + 
+		std::abs(std::abs(AL_position.first - i.first) - std::abs(AL_position.second - i.second));
 		//If it is less than the minimum change the minimum
 		sum += mh_k;
 
 		//Distancet to the goal, update minimum
-		int ming = std::abs(i.first -goal.first) + std::abs(i.second -goal.second);
+		int ming = std::min(std::abs(i.first - goal.first), std::abs(i.second - goal.second)) + 
+		std::abs(std::abs(i.first - goal.first) - std::abs(i.second - goal.second));
 		min_k_g = (ming < min_k_g) ? ming: min_k_g;
 	}
-	//Return the sum of manhattan keys and the distance from the closest key to the goal
+	//Return the sum of dd keys and the distance from the closest key to the goal
 	return sum+min_k_g;
 }
 
