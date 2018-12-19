@@ -109,12 +109,8 @@ std::vector<astar_node> s_agent::expand(const astar_node & current){
 //Function to print path
 bool s_agent::print_result(std::ostream & flux_to){
 	
-	if(!executed) return false; //Not done if not executed
+	if(!executed || !solution) return false; //Not done if not executed
 
-	if(!solution){ //FIXME: Esto duda 
-		flux_to << "Search Agent was not able to find a solution for your problem\n";
-		return true;
-	}
 	//Print map
 	map.print(flux_to);
 	//Print path
@@ -129,7 +125,7 @@ bool s_agent::print_result(std::ostream & flux_to){
 //Function to print statistics
 bool s_agent::print_statistics(std::ostream & flux_to){
 
-	if(!executed) return false; //Not done if not executed
+	if(!executed || !solution) return false; //Not done if not executed
 
 	//Statistics for both solution and not PREGUNTAR, time
 	flux_to << "Overall running time: " << execution_time.count() << " miliseconds\n";

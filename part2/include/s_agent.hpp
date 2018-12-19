@@ -2,8 +2,8 @@
 #define AGENT
 //Definition of s_agent class
 
-#include <string> //Parsing input ?¿¿? (remove!)
 #include <chrono>
+#include <iostream>
 #include "maze.hpp"
 #include "t_state.hpp"
 #include "closed_list.hpp"
@@ -24,6 +24,9 @@ class s_agent{
 		//Functions to print statistics and path
 		bool print_result(std::ostream & flux_to);
 		bool print_statistics(std::ostream & flux_to);
+
+		//To know if solution found
+		bool get_sol_state(){return solution;}
 
 	private:
 

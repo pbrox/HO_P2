@@ -25,6 +25,9 @@ class s_agent{
 		bool print_result(std::ostream & flux_to);
 		bool print_statistics(std::ostream & flux_to);
 
+		//To know if solution found
+		bool get_sol_state(){return solution;}
+
 	private:
 
 		//Contains a Map (with constains an initial state) constant after initialization
