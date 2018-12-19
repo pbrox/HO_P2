@@ -2,14 +2,14 @@
 
 #Cmake and makefile wrapper
 #Previous versions removing
-rm -rf build
+#rm -rf build
 #Creates a build folder
-mkdir build
+#mkdir build
 #Enters 
-cd build
+#cd build
 
 #cmake
-cmake ..
+cmake .
 #make
 make
 
