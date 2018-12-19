@@ -12,7 +12,7 @@
 
 
 enum moves {up, down, left, right, up_left, up_right, down_left, down_right};
-enum heuristic_funcs : short{h_default, min_k_mahattan, sum_k_mahattan, bad_h};
+enum heuristic_funcs : short{h_default, sum_k_diagonal, bad_h};
 
 //Antipated declaration to avoid circular dependencies 
 class Maze;
@@ -23,7 +23,7 @@ class t_state{
 
 		//Constructor for the initial state
 		t_state( std::set<std::pair<int,int>> keys, std::vector<std::pair<int,int>> stones, std::pair<int,int> al,  int cost, heuristic_funcs heuristic_choosen, const std::pair<int,int> &goal ) :
-		keys(keys), stones(stones), AL_position(al), g(cost), used_heuristic(heuristic_choosen) {heuristic_v = heuristic(used_heuristic, goal, keys.size());}
+		keys(keys), stones(stones), AL_position(al), g(cost), used_heuristic(heuristic_choosen) {heuristic_v = heuristic(used_heuristic, goal);}
 		
 		~t_state();
 
@@ -62,6 +62,12 @@ class t_state{
 		//Getting G
 		int get_g() const {return g;}
 
+		//getting if it is stone
+		bool is_stone(std::pair<int,int> to_check){return std::find(stones.begin(), stones.end(), to_check) != stones.end();}
+
+		//getting if it is a key
+		bool is_key(std::pair<int,int> key){return keys.count(key);}
+
 
 	private:
 		std::set<std::pair<int,int>> keys; //Set containing all the remaining keys
@@ -72,16 +78,13 @@ class t_state{
 		heuristic_funcs used_heuristic;
 
 		//Heuristic functions collection
-		int heuristic(heuristic_funcs choosen,const std::pair<int,int> &goal, int keys); //Heuristic function
+		int heuristic(heuristic_funcs choosen,const std::pair<int,int> &goal); //Heuristic function
 		
 		//Heuristic returning always 0
 		int default_h();
 
-		//Heuristic returning the minimum manhattan distance to a key or the mh to the goal in case of empty
-		int min_mahattan_key(const std::pair<int,int> &goal, int total_keys);
-
 		//Heuristic returning the sum of the manhattan distances
-		int sum_mahattan_key(const std::pair<int,int> &goal, int total_keys);
+		int sum_diagonal_key(const std::pair<int,int> &goal);
 
 
 		//Function returning next position (no checks)

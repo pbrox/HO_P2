@@ -8,5 +8,5 @@ part3/build
 .DS_Store?
 
 #outputs
-.output
-.statistic
+*.output
+*.statistics

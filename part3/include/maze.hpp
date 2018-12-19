@@ -37,7 +37,7 @@ class Maze{
 		cell_type operator()(int row, int col) const;
 
 		//printing the map (for debug)
-		void print() const;
+		void print(std::ostream & flux) const;
 
 		//getting goal row
 		int goal_row() const {return goal[1];}

@@ -133,32 +133,33 @@ cell_type Maze::operator()(int row, int col) const{
 
 
 //Printing the map for debugging 
-void Maze::print() const{
+//Printing the map for debugging 
+void Maze::print(std::ostream & flux) const{
 
 	//checking map
 	for(int i = 0; i < ydim; ++i){ //For each row
 		for(int j= 0; j < xdim; ++j){ //For each column in the row
 			switch ((*this)(i,j)){
 				case wall: //Non traversable
-					std::cout << "%";
+					flux << "%";
 					break;
 				case empty: //empty space
-					if(isGoal(i,j)) std::cout << "E";
-					else std::cout << " ";
+					if(isGoal(i,j)) flux << "E";
+					else if(initial_state->is_key(std::make_pair(i,j))) flux << 'K';
+					else if(initial_state->get_position() == std::make_pair(i,j)) flux << 'A';
+					else if(initial_state->is_stone(std::make_pair(i,j))) flux << 'O';
+					else flux << " ";
 					break;
 				case snake: //Snake
-					std::cout << "S";
+					flux << "S";
 					break;
 				default: //unrecognizd tipe
-					std::cout << "error";
+					flux << "error";
 			}
 		}
 		//newline
-		std::cout << '\n';
+		flux << '\n';
 
 	}
-
-	//initial state
-	initial_state->print();
 
 }
