@@ -43,7 +43,7 @@ public class SATPaganitzu {
 
 			//We take the maximum rectangule contained in the map
 			if(linea.length()<nColumnas) nColumnas = linea.length();
-			for(int j = 0; j<linea.length();++j){
+			for(int j = 0; j<linea.length(); ++j){
 
 				//Wrong input Characters should be ignore and they won't appear in the output
 				if(linea.charAt(j)=='K'||linea.charAt(j)=='E'||linea.charAt(j)=='%'||linea.charAt(j)=='O'||linea.charAt(j)==' ') auxM.add(linea.charAt(j));
@@ -184,11 +184,11 @@ public class SATPaganitzu {
 					}
 				}
 			}
-
+			finalOutput(maze, name);
 			}else System.out.println("NO RESULT FOUND AND NO OUTPUT GENERATED");
 
 		System.out.println();
-		finalOutput(maze, name);
+
 	}
 
 	public static void addClause(SatWrapper satWrapper, int literal1, int literal2){
