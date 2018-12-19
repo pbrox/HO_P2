@@ -1,4 +1,4 @@
 #!/bin/bash
 
-java -classpath .:jacop-4.3.0.jar SATPaganitzu /Users/jorgesanmartinlopez/Documents/GitHub/HO_P2/part1/maps/dosMapa.txt 10
+java -classpath .:jacop-4.3.0.jar SATPaganitzu maps/labWrongChar-part1.lab 7
 
