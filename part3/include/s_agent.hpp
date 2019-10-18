@@ -9,7 +9,7 @@
 #include "closed_list.hpp"
 #include "open_list.hpp"
 
-constexpr int max_h = 1024;
+inline static constexpr int max_h = 1024;
 
 class s_agent{
 
